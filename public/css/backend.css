@@ -1,0 +1,26 @@
+.user-panel > .image img {
+    width: 100%;
+    max-width: 45px;
+    height: auto;
+}
+
+.link-lang {
+    width: 24px;
+    height: 18px;
+    background-position: 50% 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    -webkit-transition: color 200ms ease;
+    transition: color 200ms ease;
+    color: #fff;
+    display: inline-block !important;
+    margin-top: 3px;
+}
+
+.link-lang.vn {
+    background-image: url('../images/flag_vn.gif');
+}
+
+.link-lang.en {
+    background-image: url('../images/flag_uk.gif');
+}

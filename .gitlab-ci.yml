@@ -1,0 +1,66 @@
+# Official framework image. Look for the different tagged releases at:
+# https://hub.docker.com/r/library/php
+image: trinhnv/php-laravel:7.4
+
+# Pick zero or more services to be used on all builds.
+# Only needed when using a docker container to run your tests in.
+# Check out: http://docs.gitlab.com/ce/ci/docker/using_docker_images.html#what-is-a-service
+services:
+  - mysql:5.7
+
+# Set any variables we need
+variables:
+  # Configure mysql environment variables (https://hub.docker.com/r/_/mysql/)
+  MYSQL_DATABASE: base
+  MYSQL_ROOT_PASSWORD: secret
+
+# This folder is cached between builds
+# http://docs.gitlab.com/ce/ci/yaml/README.html#cache
+cache:
+  paths:
+    - vendor/
+    - node_modules/
+
+stages:
+  - preparing
+  - build
+  - test
+  - deploy
+
+preparing:
+  stage: preparing
+  script:
+    # Update packages
+    - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
+    - cp .env.example .env
+    - php artisan key:generate
+
+# Build code
+build:
+  stage: build
+  dependencies:
+    - preparing
+  script:
+    # Copy over testing configuration.
+    - php artisan migrate
+    - php artisan db:seed
+
+# Test
+test:
+  stage: test
+  script:
+    - echo "test"
+
+
+# Deploying
+deploy:
+  stage: deploy
+  only:
+    - master
+  script:
+    # Copy over testing configuration.
+    #- bash .deploy.sh
+    - cp .env.example .env
+    #- npm run prod
+    - echo "deploy staging done"
+
